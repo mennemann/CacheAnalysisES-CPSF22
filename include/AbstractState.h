@@ -134,10 +134,28 @@ public: // everything is public, because IDGAF
    * @param In, AbstractState that gets joined into the State.
    */
   void mustJoin(AbstractState In) {
-    /**
-     * The exercise is to Fill this function with an LRU must Join.
-     * For this you need to use Sets. Associativity and Blocks.
-     */
+    for (int SetI = 0; SetI < 16; SetI++) {
+      for (int Age = 0; Age < 4; Age++) {
+        for (auto Block : std::list<unsigned int>(Sets[SetI].Associativity[Age].Blocks.begin(), Sets[SetI].Associativity[Age].Blocks.end())){
+          
+          int InSetAge = -1;
+          for (int LAge = 0; LAge < 4; LAge++) {
+            for (auto TBlock : In.Sets[SetI].Associativity[LAge].Blocks) {
+              if (Block == TBlock) InSetAge = LAge;
+            }
+          }
+
+          if (InSetAge == -1) {
+            Sets[SetI].Associativity[Age].Blocks.remove(Block);
+          } else {
+            if (InSetAge > Age) {
+              Sets[SetI].Associativity[Age].Blocks.remove(Block);
+              Sets[SetI].Associativity[InSetAge].Blocks.push_back(Block);
+            }
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -146,10 +164,28 @@ public: // everything is public, because IDGAF
    * @param In, AbstractState that gets joined into the State.
    */
   void mayJoin(AbstractState In) {
-    /**
-     * The exercise is to Fill this function with an LRU must Join.
-     * For this you need to use Sets. Associativity and Blocks.
-     */
+    for (int SetI = 0; SetI < 16; SetI++) {
+      for (int Age = 0; Age < 4; Age++) {
+        for (auto Block : In.Sets[SetI].Associativity[Age].Blocks) {
+          
+          int SetAge = -1;
+          for (int LAge = 0; LAge < 4; LAge++) {
+            for (auto TBlock : Sets[SetI].Associativity[LAge].Blocks) {
+              if (Block == TBlock) SetAge = LAge;
+            }
+          }
+
+          if (SetAge == -1) {
+            Sets[SetI].Associativity[Age].Blocks.push_back(Block);
+          } else {
+            if (SetAge > Age) {
+              Sets[SetI].Associativity[SetAge].Blocks.remove(Block);
+              Sets[SetI].Associativity[Age].Blocks.push_back(Block);
+            }
+          }
+        }
+      }
+    }
   }
 
   /**
