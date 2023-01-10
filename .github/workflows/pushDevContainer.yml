@@ -1,0 +1,34 @@
+name: "build"
+on:
+  push:
+    tags:
+    - '*'
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (GitHub)
+        uses: actions/checkout@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and run dev container task
+        uses: devcontainers/ci@v0.2
+        #- uses: education/autograding@v1
+        with:
+          # Change this to point to your image name
+          imageName: ghcr.io/tu-dortmund-cs-ls12-daes-teaching/coding02-devcontainer
+          # Change this to be your CI task/script
+          #runCmd: ./helper.sh config ; ./helper.sh c ; ./build/bin/UnitTest --gtest_filter="MayJoinTests.*"

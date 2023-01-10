@@ -1,0 +1,12 @@
+build/
+*.out
+*.dot
+*.png
+.gitconfig
+.vscode-server
+.gnupg
+.bash_history
+.cache/
+*.solution
+compile_commands.json
+llvm/

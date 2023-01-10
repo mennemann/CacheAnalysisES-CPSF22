@@ -1,0 +1,19 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "config",
+      "type": "shell",
+      "command": "rm -r build ; rm complile_commands.json ; mkdir build ; cd build ; cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DLT_LLVM_INSTALL_DIR=$LLVM_DIR ..",
+      "group": "build"
+    },
+    {
+      "label": "build",
+      "type": "shell",
+      "command": " cd build ; ninja ",
+      "group": "build"
+    },
+  ]
+}
